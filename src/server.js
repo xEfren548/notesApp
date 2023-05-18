@@ -2,6 +2,7 @@ const express = require('express');
 const exphbs = require('express-handlebars')
 const path = require('path');
 const morgan = require('morgan');
+const methodOverride = require('method-override');
 
 // Inicializaciones
 const app = express();
@@ -14,7 +15,11 @@ app.engine('.hbs', exphbs.engine({
     layoutsDir: path.join(app.get('views'), 'layouts'),
     partialsDir: path.join(app.get('views'), 'partials'),
     extname: '.hbs',
-
+      // Disable the knownHelpersOnly check
+    runtimeOptions: {
+    knownHelpersOnly: false,
+    allowProtoPropertiesByDefault: true
+  }
 }))
 app.set('view engine', '.hbs');
 
@@ -22,7 +27,7 @@ app.set('view engine', '.hbs');
 //Middlewares
 app.use(morgan('dev'))
 app.use(express.urlencoded({ extended: false }));
-
+app.use(methodOverride('_method'));
 // Global variables
 
 
